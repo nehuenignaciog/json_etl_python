@@ -35,6 +35,10 @@ if __name__ == '__main__':
     # gráfico en el eje "x" está cada uno de los 10 usuarios y en el eje
     # "y" la cantidad de títulos completados
 
+
+
+
+
     # Para poder ir haciendo esto debe ir almacenando la información
     # de cada usuario a medida que "itera" en un bucle los datos
     # del JSON recolectado. Al finalizar el bucle deberá tener la data
@@ -46,4 +50,47 @@ if __name__ == '__main__':
     # y verifique si los primeros usuarios (mirando la página a ojo)
     # los datos recolectados son correctos.
 
-    print("terminamos")
+    #Guardo datos de la URL
+    response = requests.get(url)
+    #todos = json.loads(response.text)
+    todos = response.json()
+
+    
+    #Itero la los datos y guardo en una lista los ID que tuvieron titulos completados
+    completados = []
+    
+    for user in todos:
+        if user['completed']:
+            completados.append(user['userId'])
+
+    
+    #Hago un distinct para calcular el total de usuarios de manera univoca.
+
+    usuarios = list(set(completados))
+
+    #Cuento la cantidad de titulos por cada usuarios y lo guardo en una lista
+    cantidad_completados = []
+    for i in usuarios:
+        cantidad_completados.append(completados.count(i))
+
+    #Grafico
+
+    fig = plt.figure()
+    fig.suptitle('Ejercicio 2',fontsize = 18)
+    ax = fig.add_subplot()
+
+    ax.bar(usuarios,cantidad_completados, label =  'Titulos Completados', color='#68A7AD')
+    ax.set_facecolor('#f0efeb')
+    ax.set_xlabel("Usuarios")
+    
+    ax.legend()
+    ax.grid()
+    plt.xticks(usuarios)
+    plt.tight_layout()
+    plt.show()
+
+
+
+    
+
+
